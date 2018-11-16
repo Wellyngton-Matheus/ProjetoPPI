@@ -11,20 +11,21 @@ import org.springframework.web.servlet.ModelAndView;
 import bibliotecaspring.dao.AlunoDAO;
 import bibliotecaspring.models.Aluno;
 
+@RequestMapping("/Aluno")
 @Controller
 public class AlunoController {
-	@RequestMapping("/aluno/form")
+	@RequestMapping("/form")
 	public String form() {
 		System.out.println("Chamou o form aluno");
-		return "aluno/form";
+		return "Aluno/form";
 	}
 
-	@PostMapping("/aluno")
+	@PostMapping("/executarCadastro")
 	public String adicionar(Aluno aluno) {
 		System.out.println(aluno);
 		AlunoDAO alunoDAO = new AlunoDAO();
 		AlunoDAO.inserir(aluno);
-		return "redirect:aluno";
+		return "Aluno/AlunoCadastrado.jsp";
 	}
 
 	@GetMapping("/aluno")
