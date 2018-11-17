@@ -1,17 +1,12 @@
 package bibliotecaspring.models;
 
-import java.util.Calendar;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class Livro {
 	int id;
 	String titulo;
 	String autor;
 	String editora;
-	@DateTimeFormat(pattern = "dd/mm/yyyy")
-	Calendar anoPublicacao;
-	String strAnoPublicacao;
+	int anoPublicado;
+	
 	int edicao;
 	boolean statusEmprestado;
 
@@ -47,20 +42,12 @@ public class Livro {
 		this.editora = editora;
 	}
 
-	public Calendar getAnoPublicacao() {
-		return anoPublicacao;
+	public int getanoPublicado() {
+		return anoPublicado;
 	}
 
-	public void setAnoPublicacao(Calendar anoPublicacao) {
-		this.anoPublicacao = anoPublicacao;
-	}
-
-	public String getStrAnoPublicacao() {
-		return strAnoPublicacao;
-	}
-
-	public void setStrAnoPublicacao(String strAnoPublicacao) {
-		this.strAnoPublicacao = strAnoPublicacao;
+	public void setanoPublicado(int anoPublicado) {
+		this.anoPublicado = anoPublicado;
 	}
 
 	public int getEdicao() {
@@ -82,7 +69,7 @@ public class Livro {
 	@Override
 	public String toString() {
 		return "Livro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", editora=" + editora
-				+ ", anoPublicacao=" + anoPublicacao + ", strAnoPublicacao=" + strAnoPublicacao + ", edicao=" + edicao
+				+ ", anoPublicado=" + anoPublicado + ", stranoPublicado=" + ", edicao=" + edicao
 				+ ", statusEmprestado=" + statusEmprestado + "]";
 	}
 

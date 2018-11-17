@@ -11,38 +11,39 @@ import org.springframework.web.servlet.ModelAndView;
 import bibliotecaspring.dao.LivroDAO;
 import bibliotecaspring.models.Livro;
 
+@RequestMapping("/Livro")
 @Controller
 public class LivroController {
 
-	@RequestMapping("/livro/form")
+	@RequestMapping("/pag")
 	public String form() {
-		System.out.println("Chamou o form livro");
-		return "livro/form";
+		System.out.println("Chamou o formulário livro");
+		return "Livro/pag";
 	}
 
-	@PostMapping("/livro")
+	@PostMapping("/executarCadastro")
 	public String adicionar(Livro livro) {
 		System.out.println(livro);
 		LivroDAO livroDAO = new LivroDAO();
 		livroDAO.inserir(livro);
-		return "redirect:livro";
+		return "Livro/LivroCadastrado";
 	}
 
-	@GetMapping("/livro")
+	@GetMapping("/Livro")
 	public ModelAndView listar() {
 		LivroDAO livroDAO = new LivroDAO();
 		List<Livro> lista = livroDAO.getLista();
-		ModelAndView model = new ModelAndView("livro/lista");
+		ModelAndView model = new ModelAndView("Livro/lista");
 		model.addObject("livro", lista);
 		return model;
 	}
 
-	@RequestMapping("/livro/remover")
+	@RequestMapping("/Livro/remover")
 	public String remover(Livro livro) {
-		System.out.println("Chamou o metodo remover livro");
+		System.out.println("Chamou o metodo remover Livro");
 		LivroDAO livroDAO = new LivroDAO();
 		livroDAO.remover(livro);
-		return "redirect:../livro/";
+		return "redirect:../Livro/";
 	}
 
 }

@@ -25,7 +25,7 @@ public class AlunoController {
 		System.out.println(aluno);
 		AlunoDAO alunoDAO = new AlunoDAO();
 		AlunoDAO.inserir(aluno);
-		return "Aluno/AlunoCadastrado.jsp";
+		return "Aluno/AlunoCadastrado";
 	}
 
 	@GetMapping("/aluno")

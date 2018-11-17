@@ -21,7 +21,7 @@ public class EmprestimoDAO {
 	
 	public int qtdLivrosEmprestadosAluno(int matricula) {
 		int contLivros = 0;
-		String sql = "select emprestimos.id from emprestimos, alunos where alunos.matricula = emprestimos.mat_aluno && emprestimos.mat_aluno = ? && emprestimos.data_devolucao is null;";
+		String sql = "select emprestimo.id from emprestimos, aluno where aluno.matricula = emprestimo.mat_aluno && emprestimo.mat_aluno = ? && emprestimo.data_devolucao is null;";
 		
 		try {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);

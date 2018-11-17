@@ -28,7 +28,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="contato" items="${contatos }">
+			<c:forEach var="livro" items="${livro }">
 				<tr>
 					<td>${livro.titulo }</td>
 					<td>${livro.autor }</td>

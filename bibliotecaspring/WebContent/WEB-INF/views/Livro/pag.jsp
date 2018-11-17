@@ -4,11 +4,11 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Insert title here</title>
+		<title>Cadastrando o livro</title>
 	</head>
 	<body>
 		<h1>Adicionar Livro</h1>
-		<form action="/bibliotecaspring/Livro" method="post">
+		<form action="/bibliotecaspring/Livro/executarCadastro" method="post">
 		<div>
 			<label>Titulo:</label>
 			<input type="text" name="titulo">

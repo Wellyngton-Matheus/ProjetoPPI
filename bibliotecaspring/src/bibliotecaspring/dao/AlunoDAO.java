@@ -20,7 +20,7 @@ public class AlunoDAO {
 
 	public static boolean inserir(Aluno aluno) {
 
-		String sql = "insert into alunos (matricula, nome, cpf, dataNascimento, endereco) values (?, ?, ?, ?, ?);";
+		String sql = "insert into aluno (matricula, nome, cpf, dataNascimento, endereco) values (?, ?, ?, ?, ?);";
 
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
@@ -75,7 +75,7 @@ public class AlunoDAO {
 	}
 
 	public boolean alterar(Aluno aluno) {
-		String sql = "update contatos set matricula=?, nome=?, cpf=?, dataNascimento=?, endereco=? where matricula=?;";
+		String sql = "update aluno set matricula=?, nome=?, cpf=?, dataNascimento=?, endereco=? where matricula=?;";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, aluno.getMatricula());
@@ -95,7 +95,7 @@ public class AlunoDAO {
 
 	public boolean remover(Aluno contato) {
 		try {
-			PreparedStatement stmt = connection.prepareStatement("delete from alunos where matricula=?;");
+			PreparedStatement stmt = connection.prepareStatement("delete from aluno where matricula=?;");
 			stmt.setLong(1, contato.getMatricula());
 			stmt.execute();
 			stmt.close();
@@ -110,7 +110,7 @@ public class AlunoDAO {
 		Aluno result = null;
 
 		try {
-			PreparedStatement stmt = this.connection.prepareStatement("select * from alunos where matricula = ?;");
+			PreparedStatement stmt = AlunoDAO.connection.prepareStatement("select * from aluno where matricula = ?;");
 			stmt.setInt(1, matricula);
 			ResultSet rs = stmt.executeQuery();
 

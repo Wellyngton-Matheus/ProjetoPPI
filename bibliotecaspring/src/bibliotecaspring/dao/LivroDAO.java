@@ -31,14 +31,14 @@ public class LivroDAO {
 		return false;
 	}
 	public boolean inserir(Livro livro) {
-		String sql = "insert into livros (titulo, autor, editora, anoPublicacao, edicao) values (?, ?, ?, ?, ?);";
+		String sql = "insert into livros (titulo, autor, editora, anoPublicado, edicao) values (?, ?, ?, ?, ?);";
 
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setString(1, livro.getTitulo());
 			stmt.setString(2, livro.getAutor());
 			stmt.setString(3, livro.getEditora());
-			stmt.setDate(4, new java.sql.Date(livro.getAnoPublicacao().getTimeInMillis()));
+			stmt.setInt(4, livro.getanoPublicado());
 			stmt.setInt(5, livro.getEdicao());
 			stmt.execute();
 			stmt.close();
@@ -57,21 +57,16 @@ public class LivroDAO {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				// criando o objeto Contato
+				
 				Livro livro = new Livro();
 				livro.setId(rs.getInt("id"));
 				livro.setTitulo(rs.getString("titulo"));
 				livro.setAutor(rs.getString("autor"));
 				livro.setEditora(rs.getString("editora"));
+				livro.setanoPublicado(rs.getInt("anoPublicado"));
 
-				// montando a data atraves do Calendar
-				Calendar data = Calendar.getInstance();
-				data.setTime(rs.getDate("anoPublicacao"));
-				livro.setAnoPublicacao(data);
-				livro.setStrAnoPublicacao(data.YEAR+"");
-				livro.setEdicao(rs.getInt("edicao"));
+				
 
-				// adicionando o objeto na lista
 				result.add(livro);
 			}
 			rs.close();
@@ -84,13 +79,13 @@ public class LivroDAO {
 	}
 
 	public boolean alterar(Livro livro) {
-		String sql = "update livros set titulo=?, autor=?, editora=?, anoPublicacao=?, edicao=?, emprestado=? where id=?;";
+		String sql = "update livros set titulo=?, autor=?, editora=?, anoPublicado=?, edicao=?, emprestado=? where id=?;";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setString(1, livro.getTitulo());
 			stmt.setString(2, livro.getAutor());
 			stmt.setString(3, livro.getEditora());
-			stmt.setDate(4, new java.sql.Date(livro.getAnoPublicacao().getTimeInMillis()));
+			stmt.setInt(4, livro.getanoPublicado());
 			stmt.setInt(5, livro.getEdicao());
 			stmt.setBoolean(6, livro.isStatusEmprestado());
 			stmt.setInt(7, livro.getId());
@@ -125,17 +120,13 @@ public class LivroDAO {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				// criando o objeto Contato
+				
 				result = new Livro();
 				result.setId(rs.getInt("id"));
 				result.setTitulo(rs.getString("titulo"));
 				result.setAutor(rs.getString("autor"));
 				result.setEditora(rs.getString("editora"));
-				// montando a data atraves do Calendar
-				Calendar data = Calendar.getInstance();
-				data.setTime(rs.getDate("anoPublicacao"));
-				result.setAnoPublicacao(data);
-				result.setStrAnoPublicacao(data.YEAR+"");
+				result.setanoPublicado(rs.getInt("anoPublicado"));
 				result.setEdicao(rs.getInt("edicao"));
 			}
 			rs.close();
@@ -156,17 +147,13 @@ public class LivroDAO {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				// criando o objeto Contato
+				
 				result = new Livro();
 				result.setId(rs.getInt("id"));
 				result.setTitulo(rs.getString("titulo"));
 				result.setAutor(rs.getString("autor"));
 				result.setEditora(rs.getString("editora"));
-				// montando a data atraves do Calendar
-				Calendar data = Calendar.getInstance();
-				data.setTime(rs.getDate("anoPlublicacao"));
-				result.setAnoPublicacao(data);
-				result.setStrAnoPublicacao(data.YEAR+"");
+				result.setanoPublicado(rs.getInt("anoPublicado"));
 				result.setEdicao(rs.getInt("edicao"));
 			}
 			rs.close();

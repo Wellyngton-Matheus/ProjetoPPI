@@ -11,7 +11,7 @@
 	<body>
 		<c:import url="../menu.jsp"></c:import>
 		<h1>Adicionar aluno</h1>
-		<form action="executarCadastro" method="post">
+		<form action="/bibliotecaspring/Aluno/executarCadastro" method="post">
 			<div>
 				<label>Matricula:</label>
 				<input type="text" name="matricula">
