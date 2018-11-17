@@ -6,7 +6,6 @@ public class Livro {
 	String autor;
 	String editora;
 	int anoPublicado;
-	
 	int edicao;
 	boolean statusEmprestado;
 

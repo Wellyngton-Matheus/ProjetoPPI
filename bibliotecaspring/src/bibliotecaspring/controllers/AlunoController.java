@@ -28,11 +28,11 @@ public class AlunoController {
 		return "Aluno/AlunoCadastrado";
 	}
 
-	@GetMapping("/aluno")
+	@GetMapping("/ListarAluno")
 	public ModelAndView listar() {
 		AlunoDAO alunoDAO = new AlunoDAO();
 		List<Aluno> lista = alunoDAO.getLista();
-		ModelAndView model = new ModelAndView("aluno/lista");
+		ModelAndView model = new ModelAndView("Aluno/ListarAluno");
 		model.addObject("aluno", lista);
 		return model;
 	}

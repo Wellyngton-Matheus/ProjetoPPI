@@ -1,7 +1,3 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="bibliotecaspring.models.Aluno"%>
-<%@page import="java.util.List"%>
-<%@page import="bibliotecaspring.dao.AlunoDAO"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -32,11 +28,12 @@
 		<tbody>
 			<c:forEach var="aluno" items="${aluno }">
 				<tr>
-					<td>${aluno.nome }</td>
 					<td>${aluno.matricula }</td>
+					<td>${aluno.nome }</td>
 					<td>${aluno.cpf }</td>
 					<td>${aluno.dataNascimento.time }</td>
 					<td>${aluno.endereco }</td>
+					<td><a href="/bibliotecaspring/aluno/remover?id=${aluno.id }">Remover</a></td>
 				</tr>
 			</c:forEach>
 

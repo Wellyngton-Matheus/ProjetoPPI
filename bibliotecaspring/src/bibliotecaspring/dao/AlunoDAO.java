@@ -52,6 +52,7 @@ public class AlunoDAO {
 			while (rs.next()) {
 				// criando o objeto Contato
 				Aluno aluno = new Aluno();
+				aluno.setId(rs.getLong("id"));
 				aluno.setMatricula(rs.getInt("matricula"));
 				aluno.setNome(rs.getString("nome"));
 				aluno.setCpf(rs.getString("cpf"));
@@ -62,7 +63,7 @@ public class AlunoDAO {
 				aluno.setDataNascimento(data);
 
 				aluno.setEndereco(rs.getString("endereco"));
-				// adicionando o objeto � lista
+				System.out.println(aluno.toString());
 				result.add(aluno);
 			}
 			rs.close();
@@ -93,10 +94,10 @@ public class AlunoDAO {
 		return true;
 	}
 
-	public boolean remover(Aluno contato) {
+	public boolean remover(Aluno aluno) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement("delete from aluno where matricula=?;");
-			stmt.setLong(1, contato.getMatricula());
+			stmt.setLong(1, aluno.getMatricula());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {

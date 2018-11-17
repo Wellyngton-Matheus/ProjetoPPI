@@ -19,7 +19,7 @@ public class LivroDAO {
 	
 	public boolean livroEstaEmprestado(int id) {
 		try {
-		PreparedStatement stmt = this.connection.prepareStatement("select * from livros where id = ?;");
+		PreparedStatement stmt = this.connection.prepareStatement("select * from livro where id = ?;");
 		stmt.setInt(1, id);
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next() && rs.getBoolean("emprestado")) {
@@ -31,7 +31,7 @@ public class LivroDAO {
 		return false;
 	}
 	public boolean inserir(Livro livro) {
-		String sql = "insert into livros (titulo, autor, editora, anoPublicado, edicao) values (?, ?, ?, ?, ?);";
+		String sql = "insert into livro (titulo, autor, editora, anoPublicado, edicao) values (?, ?, ?, ?, ?);";
 
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class LivroDAO {
 		List<Livro> result = new ArrayList<>();
 
 		try {
-			PreparedStatement stmt = this.connection.prepareStatement("select * from livros;");
+			PreparedStatement stmt = this.connection.prepareStatement("select * from livro;");
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -79,7 +79,7 @@ public class LivroDAO {
 	}
 
 	public boolean alterar(Livro livro) {
-		String sql = "update livros set titulo=?, autor=?, editora=?, anoPublicado=?, edicao=?, emprestado=? where id=?;";
+		String sql = "update livro set titulo=?, autor=?, editora=?, anoPublicado=?, edicao=?, emprestado=? where id=?;";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setString(1, livro.getTitulo());
@@ -100,7 +100,7 @@ public class LivroDAO {
 
 	public boolean remover(Livro livro) {
 		try {
-			PreparedStatement stmt = connection.prepareStatement("delete from livros where id=?;");
+			PreparedStatement stmt = connection.prepareStatement("delete from livro where id=?;");
 			stmt.setInt(1, livro.getId());
 			stmt.execute();
 			stmt.close();
@@ -115,7 +115,7 @@ public class LivroDAO {
 		Livro result = null;
 
 		try {
-			PreparedStatement stmt = this.connection.prepareStatement("select * from livros where titulo = ?;");
+			PreparedStatement stmt = this.connection.prepareStatement("select * from livro where titulo = ?;");
 			stmt.setString(1, titulo);
 			ResultSet rs = stmt.executeQuery();
 
@@ -142,7 +142,7 @@ public class LivroDAO {
 		Livro result = null;
 
 		try {
-			PreparedStatement stmt = this.connection.prepareStatement("select * from livros where id = ?;");
+			PreparedStatement stmt = this.connection.prepareStatement("select * from livro where id = ?;");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 

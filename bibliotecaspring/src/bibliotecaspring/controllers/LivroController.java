@@ -29,11 +29,11 @@ public class LivroController {
 		return "Livro/LivroCadastrado";
 	}
 
-	@GetMapping("/Livro")
+	@GetMapping("/ListarLivro")
 	public ModelAndView listar() {
 		LivroDAO livroDAO = new LivroDAO();
 		List<Livro> lista = livroDAO.getLista();
-		ModelAndView model = new ModelAndView("Livro/lista");
+		ModelAndView model = new ModelAndView("Livro/ListarLivro");
 		model.addObject("livro", lista);
 		return model;
 	}
