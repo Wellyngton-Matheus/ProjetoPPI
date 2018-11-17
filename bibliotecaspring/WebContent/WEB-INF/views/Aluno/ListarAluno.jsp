@@ -33,7 +33,7 @@
 					<td>${aluno.cpf }</td>
 					<td>${aluno.dataNascimento.time }</td>
 					<td>${aluno.endereco }</td>
-					<td><a href="/bibliotecaspring/aluno/remover?id=${aluno.id }">Remover</a></td>
+					<td><a href="/bibliotecaspring/Aluno/remover?id=${aluno.id }">Remover</a></td>
 				</tr>
 			</c:forEach>
 

@@ -35,7 +35,7 @@
 					<td>${livro.editora }</td>
 					<td>${livro.anoPublicado }</td>
 					<td>${livro.edicao }</td>
-					<td><a href="/bibliotecaspring/livro/remover?id=${livro.id }">Remover</a></td>
+					<td><a href="/bibliotecaspring/Livro/remover?id=${livro.id }">Remover</a></td>
 				</tr>
 			</c:forEach>
 

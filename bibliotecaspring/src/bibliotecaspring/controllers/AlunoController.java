@@ -16,7 +16,7 @@ import bibliotecaspring.models.Aluno;
 public class AlunoController {
 	@RequestMapping("/form")
 	public String form() {
-		System.out.println("Chamou o form aluno");
+		System.out.println("Chamou o formulario do adicionar o aluno");
 		return "Aluno/form";
 	}
 
@@ -37,12 +37,12 @@ public class AlunoController {
 		return model;
 	}
 
-	@RequestMapping("/aluno/remover")
-	public String remover(Aluno aluno) {
+	@RequestMapping("remover")
+	public ModelAndView remover(Aluno aluno) {
 		System.out.println("Chamou o metodo remover aluno");
 		AlunoDAO alunoDAO = new AlunoDAO();
 		alunoDAO.remover(aluno);
-		return "redirect:../aluno/";
+		return listar();
 	}
 
 }

@@ -96,8 +96,8 @@ public class AlunoDAO {
 
 	public boolean remover(Aluno aluno) {
 		try {
-			PreparedStatement stmt = connection.prepareStatement("delete from aluno where matricula=?;");
-			stmt.setLong(1, aluno.getMatricula());
+			PreparedStatement stmt = connection.prepareStatement("delete from aluno where id=?;");
+			stmt.setLong(1, aluno.getId());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {

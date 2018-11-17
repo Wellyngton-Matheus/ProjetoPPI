@@ -21,7 +21,7 @@ public class EmprestimoDAO {
 	
 	public int qtdLivrosEmprestadosAluno(int matricula) {
 		int contLivros = 0;
-		String sql = "select emprestimo.id from emprestimos, aluno where aluno.matricula = emprestimo.mat_aluno && emprestimo.mat_aluno = ? && emprestimo.data_devolucao is null;";
+		String sql = "select emprestimo.id from emprestimo, aluno where aluno.matricula = emprestimo.mat_aluno && emprestimo.mat_aluno = ? && emprestimo.data_devolucao is null;";
 		
 		try {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
@@ -36,7 +36,7 @@ public class EmprestimoDAO {
 		return contLivros;
 	}
 	public static boolean inserir(Emprestimo emprestimo) {
-		String sql = "insert into emprestimos (mat_aluno, id_livro, data_emprestimo, data_devolucao) values (?, ?, ?, ?);";
+		String sql = "insert into emprestimo (mat_aluno, id_livro, data_emprestimo, data_devolucao) values (?, ?, ?, ?);";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, emprestimo.getMatriculaAluno());
@@ -53,7 +53,7 @@ public class EmprestimoDAO {
 	}
 	
 	public boolean setDataDevolucaoEmprestimo(int idEmprestimo) {
-		String sql = "update emprestimos set data_devolucao = ? where id = ? && emprestimos.data_devolucao is null;";
+		String sql = "update emprestimo set data_devolucao = ? where id = ? && emprestimo.data_devolucao is null;";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			Calendar dataDevolucao = Calendar.getInstance();
@@ -68,7 +68,7 @@ public class EmprestimoDAO {
 		return true;
 	}
 	public boolean devolucaoLivro(int id) {
-		String sql = "update livros set emprestado = 0 where id = ?;";
+		String sql = "update livro set emprestado = 0 where id = ?;";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, id);
@@ -84,7 +84,7 @@ public class EmprestimoDAO {
 		List<String> result = new ArrayList<>();
 
 		try {
-			String sql = "select livros.titulo from livros, emprestimos where emprestimos.id_livro = livros.id && emprestimos.mat_aluno = ? && livros.emprestado = 1;";
+			String sql = "select livro.titulo from livro, emprestimo where emprestimo.id_livro = livros.id && emprestimo.mat_aluno = ? && livro.emprestado = 1;";
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setInt(1, matricula);
 			ResultSet rs = stmt.executeQuery();
@@ -112,7 +112,7 @@ public class EmprestimoDAO {
 	public int getIdEmprestimo(int idLivro) {
 		int idEmprestimo = 0;
 		try {
-			String sql = "select emprestimos.id from emprestimos where emprestimos.id_livro = ? and emprestimos.data_devolucao is null;";
+			String sql = "select emprestimo.id from emprestimos where emprestimo.id_livro = ? and emprestimos.data_devolucao is null;";
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setInt(1, idLivro);
 			ResultSet rs = stmt.executeQuery();
@@ -130,7 +130,7 @@ public class EmprestimoDAO {
 	public List<Relatorio> emprestimos(){
 		List<Relatorio> result = new ArrayList<>();
 		try {
-			String sql = "select emprestimos.mat_aluno, alunos.nome, livros.titulo, livros.autor, livros.edicao, emprestimos.data_emprestimo from emprestimos, alunos, livros where emprestimos.mat_aluno = alunos.matricula && emprestimos.id_livro = livros.id && emprestimos.data_devolucao is null;";
+			String sql = "select emprestimo.mat_aluno, aluno.nome, livro.titulo, livro.autor, livro.edicao, emprestimo.data_emprestimo from emprestimo, aluno, livro where emprestimo.mat_aluno = alunos.matricula && emprestimo.id_livro = livro.id && emprestimo.data_devolucao is null;";
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {

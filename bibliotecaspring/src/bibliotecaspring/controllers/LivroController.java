@@ -17,7 +17,7 @@ public class LivroController {
 
 	@RequestMapping("/pag")
 	public String form() {
-		System.out.println("Chamou o formulário livro");
+		System.out.println("Chamou o form do livro");
 		return "Livro/pag";
 	}
 
@@ -38,12 +38,12 @@ public class LivroController {
 		return model;
 	}
 
-	@RequestMapping("/Livro/remover")
-	public String remover(Livro livro) {
+	@RequestMapping("remover")
+	public ModelAndView remover(Livro livro) {
 		System.out.println("Chamou o metodo remover Livro");
 		LivroDAO livroDAO = new LivroDAO();
 		livroDAO.remover(livro);
-		return "redirect:../Livro/";
+		return listar();
 	}
 
 }
