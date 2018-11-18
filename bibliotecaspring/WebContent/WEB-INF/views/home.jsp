@@ -9,6 +9,6 @@
 	</head>
 	<body>
 		<c:import url="menu.jsp"></c:import>
-		<h1>Bem vindo a aplicação Spring!</h1>
+		<h1>Bem vindo a biblioteca</h1>
 	</body>
 </html>

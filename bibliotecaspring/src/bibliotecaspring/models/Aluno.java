@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Aluno {
 
 	private Long id;
-	private int matricula;
+	private String matricula;
 	private String nome;
 	private String cpf;
 	@DateTimeFormat(pattern = "dd/mm/yyyy")
@@ -22,11 +22,11 @@ public class Aluno {
 		this.id = id;
 	}
 
-	public int getMatricula() {
+	public String getMatricula() {
 		return matricula;
 	}
 
-	public void setMatricula(int matricula) {
+	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
 

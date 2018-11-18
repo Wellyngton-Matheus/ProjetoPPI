@@ -2,34 +2,12 @@ package bibliotecaspring.models;
 
 import java.util.Calendar;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class Emprestimo {
-	int idLivro;
-	int matriculaAluno;
-	@DateTimeFormat(pattern = "dd/mm/yyyy")
-	Calendar dataEmprestimo;
-	@DateTimeFormat(pattern = "dd/mm/yyyy")
-	Calendar dataDevolucao;
-
-	String nomeAluno;
-	String tituloLivroEmprestado;
-
-	public int getIdLivro() {
-		return idLivro;
-	}
-
-	public void setIdLivro(int idLivro) {
-		this.idLivro = idLivro;
-	}
-
-	public int getMatriculaAluno() {
-		return matriculaAluno;
-	}
-
-	public void setMatriculaAluno(int matriculaAluno) {
-		this.matriculaAluno = matriculaAluno;
-	}
+	private Long id;
+	private Aluno aluno;
+	private Livro livro;
+	private Calendar dataEmprestimo;
+	private Calendar dataDevolucao;
 
 	public Calendar getDataEmprestimo() {
 		return dataEmprestimo;
@@ -47,26 +25,36 @@ public class Emprestimo {
 		this.dataDevolucao = dataDevolucao;
 	}
 
-	public String getNomeAluno() {
-		return nomeAluno;
+	public Long getId() {
+		return id;
 	}
 
-	public void setNomeAluno(String nomeAluno) {
-		this.nomeAluno = nomeAluno;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public String getTituloLivroEmprestado() {
-		return tituloLivroEmprestado;
+	public Aluno getAluno() {
+		return aluno;
 	}
 
-	public void setTituloLivroEmprestado(String tituloLivroEmprestado) {
-		this.tituloLivroEmprestado = tituloLivroEmprestado;
+	public void setAluno(Aluno aluno) {
+		this.aluno = aluno;
+	}
+
+	public Livro getLivro() {
+		return livro;
+	}
+
+	public void setLivro(Livro livro) {
+		this.livro = livro;
 	}
 
 	@Override
 	public String toString() {
-		return "Emprestimo [idLivro=" + idLivro + ", matriculaAluno=" + matriculaAluno + ", dataEmprestimo="
-				+ dataEmprestimo + ", dataDevolucao=" + dataDevolucao + ", nomeAluno=" + nomeAluno
-				+ ", tituloLivroEmprestado=" + tituloLivroEmprestado + "]";
+		return "Emprestimo [id=" + id + ", aluno=" + aluno + ", livro=" + livro + ", dataEmprestimo=" + dataEmprestimo
+				+ ", dataDevolucao=" + dataDevolucao + "]";
 	}
+	
+	
+
 }

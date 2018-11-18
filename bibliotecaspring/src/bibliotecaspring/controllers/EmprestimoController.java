@@ -8,34 +8,57 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import bibliotecaspring.dao.AlunoDAO;
 import bibliotecaspring.dao.EmprestimoDAO;
+import bibliotecaspring.dao.LivroDAO;
+import bibliotecaspring.models.Aluno;
 import bibliotecaspring.models.Emprestimo;
-import bibliotecaspring.models.Relatorio;
+import bibliotecaspring.models.Livro;
 
 @Controller
+
 public class EmprestimoController {
+	@RequestMapping("/Emprestimo/formEmp")
+	public ModelAndView form() {
+		System.out.println("Chamou método form");
+		AlunoDAO alunoDAO = new AlunoDAO();
+		List<Aluno> listaAluno = alunoDAO.getLista();
+		LivroDAO livroDAO = new LivroDAO();
+		List<Livro> listaLivro = livroDAO.getLista();
+		ModelAndView model = new ModelAndView("Emprestimo/formEmp");
+		model.addObject("aluno", listaAluno);
+		model.addObject("livro", listaLivro);
+		return model;
 
-	@RequestMapping("/emprestimo/form")
-	public String form() {
-		System.out.println("Chamou o form emprestimo");
-		return "emprestimo/form";
 	}
-
-	@PostMapping("/emprestimo")
-	public String adicionar(Emprestimo emprestimo) {
+	
+	@PostMapping("/Emprestimo/formEmp")
+	public String AdicionarEmprestimo(Emprestimo emprestimo) {
 		System.out.println(emprestimo);
 		EmprestimoDAO emprestimoDAO = new EmprestimoDAO();
-		EmprestimoDAO.inserir(emprestimo);
-		return "contatos/contatoOk";
+				emprestimoDAO.inserir(emprestimo);
+		return "Emprestimo/EmprestimoCadastrado";
 	}
 
-	@GetMapping("/emprestimo")
+
+	@GetMapping("/Emprestimo/ListarEmp")
 	public ModelAndView listar() {
 		EmprestimoDAO emprestimoDAO = new EmprestimoDAO();
-		List<Relatorio> lista = emprestimoDAO.emprestimos();
-		ModelAndView model = new ModelAndView("emprestimo/lista");
-		model.addObject("emprestimo", lista);
+		List<Emprestimo> listaEmprestimo = emprestimoDAO.getLista();
+		ModelAndView model = new ModelAndView("Emprestimo/ListarEmp");
+		model.addObject("Emprestimo", listaEmprestimo);
 		return model;
 	}
 
+
+	@RequestMapping("/Emprestimo/devolucao")
+	public String devolucao(Emprestimo emprestimo) {
+		System.out.println("Chamou o método devolução");
+		EmprestimoDAO emprestimoDAO = new EmprestimoDAO();
+		System.out.println(emprestimo);
+		emprestimoDAO.devolucao(emprestimo);
+		
+		return "redirect:../Emprestimo/ListarEmp";
+
+	}
 }

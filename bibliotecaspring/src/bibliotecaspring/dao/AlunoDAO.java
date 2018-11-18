@@ -11,21 +11,21 @@ import java.util.List;
 import bibliotecaspring.models.Aluno;
 
 public class AlunoDAO {
-	private static Connection connection;
+	private Connection connection;
 
 	public AlunoDAO() {
 		connection = ConnectionFactory.getConnection();
 
 	}
 
-	public static boolean inserir(Aluno aluno) {
+	public  boolean inserir(Aluno aluno) {
 
 		String sql = "insert into aluno (matricula, nome, cpf, dataNascimento, endereco) values (?, ?, ?, ?, ?);";
 
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 
-			stmt.setInt(1, aluno.getMatricula());
+			stmt.setString(1, aluno.getMatricula());
 			stmt.setString(2, aluno.getNome());
 			stmt.setString(3, aluno.getCpf());
 			stmt.setDate(4, new java.sql.Date(aluno.getDataNascimento().getTimeInMillis()));
@@ -50,20 +50,17 @@ public class AlunoDAO {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				// criando o objeto Contato
+				
 				Aluno aluno = new Aluno();
 				aluno.setId(rs.getLong("id"));
-				aluno.setMatricula(rs.getInt("matricula"));
+				aluno.setMatricula(rs.getString("matricula"));
 				aluno.setNome(rs.getString("nome"));
 				aluno.setCpf(rs.getString("cpf"));
-
-				// montando a data atrav�s do Calendar
 				Calendar data = Calendar.getInstance();
 				data.setTime(rs.getDate("dataNascimento"));
 				aluno.setDataNascimento(data);
-
 				aluno.setEndereco(rs.getString("endereco"));
-				System.out.println(aluno.toString());
+				
 				result.add(aluno);
 			}
 			rs.close();
@@ -79,12 +76,12 @@ public class AlunoDAO {
 		String sql = "update aluno set matricula=?, nome=?, cpf=?, dataNascimento=?, endereco=? where matricula=?;";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, aluno.getMatricula());
+			stmt.setString(1, aluno.getMatricula());
 			stmt.setString(2, aluno.getNome());
 			stmt.setString(3, aluno.getCpf());
 			stmt.setDate(4, new java.sql.Date(aluno.getDataNascimento().getTimeInMillis()));
 			stmt.setString(5, aluno.getEndereco());
-			stmt.setLong(6, aluno.getMatricula());
+			stmt.setString(6, aluno.getMatricula());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -107,18 +104,18 @@ public class AlunoDAO {
 		return true;
 	}
 
-	public Aluno getById(int matricula) {
+	public Aluno getById(long l) {
 		Aluno result = null;
 
 		try {
-			PreparedStatement stmt = AlunoDAO.connection.prepareStatement("select * from aluno where matricula = ?;");
-			stmt.setInt(1, matricula);
+			PreparedStatement stmt = this.connection.prepareStatement("select * from aluno where matricula = ?;");
+			stmt.setInt(1, (int) l);
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 				// criando o objeto Contato
 				result = new Aluno();
-				result.setMatricula(rs.getInt("matricula"));
+				result.setMatricula(rs.getString("matricula"));
 				result.setNome(rs.getString("nome"));
 				result.setCpf(rs.getString("cpf"));
 
@@ -136,6 +133,11 @@ public class AlunoDAO {
 		}
 
 		return result;
+	}
+
+	public Aluno getByMatricula(int matriculaAluno) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

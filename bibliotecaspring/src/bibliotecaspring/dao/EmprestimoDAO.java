@@ -1,6 +1,7 @@
 package bibliotecaspring.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import bibliotecaspring.models.Aluno;
 import bibliotecaspring.models.Emprestimo;
-import bibliotecaspring.models.Relatorio;
-
+import bibliotecaspring.models.Livro;
 
 public class EmprestimoDAO {
 	private static Connection connection;
@@ -18,150 +19,213 @@ public class EmprestimoDAO {
 	public EmprestimoDAO() {
 		connection = ConnectionFactory.getConnection();
 	}
-	
-	public int qtdLivrosEmprestadosAluno(int matricula) {
-		int contLivros = 0;
-		String sql = "select emprestimo.id from emprestimo, aluno where aluno.matricula = emprestimo.mat_aluno && emprestimo.mat_aluno = ? && emprestimo.data_devolucao is null;";
-		
-		try {
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setInt(1, matricula);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next())
-				contLivros++;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return contLivros;
-	}
-	public static boolean inserir(Emprestimo emprestimo) {
-		String sql = "insert into emprestimo (mat_aluno, id_livro, data_emprestimo, data_devolucao) values (?, ?, ?, ?);";
-		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, emprestimo.getMatriculaAluno());
-			stmt.setInt(2, emprestimo.getIdLivro());
-			stmt.setDate(3, new java.sql.Date(emprestimo.getDataEmprestimo().getTimeInMillis()));
-			stmt.setDate(4, null);
-			stmt.execute();
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean setDataDevolucaoEmprestimo(int idEmprestimo) {
-		String sql = "update emprestimo set data_devolucao = ? where id = ? && emprestimo.data_devolucao is null;";
-		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
-			Calendar dataDevolucao = Calendar.getInstance();
-			stmt.setDate(1, new java.sql.Date(dataDevolucao.getTimeInMillis()));
-			stmt.setInt(2, idEmprestimo);
-			stmt.execute();
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	public boolean devolucaoLivro(int id) {
-		String sql = "update livro set emprestado = 0 where id = ?;";
-		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, id);
-			stmt.execute();
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	public List<String> getListaEmprestimosDoAluno(int matricula) {
-		List<String> result = new ArrayList<>();
+
+	public boolean inserir(Emprestimo emprestimo) {
+
+		String sql = "insert into emprestimo (livro, aluno, dataEmprestimo, dataDevolucao) values (?, ?, ?, ?);";
 
 		try {
-			String sql = "select livro.titulo from livro, emprestimo where emprestimo.id_livro = livros.id && emprestimo.mat_aluno = ? && livro.emprestado = 1;";
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setInt(1, matricula);
+			PreparedStatement stmt = connection.prepareStatement(sql);
+
+			stmt.setLong(1, emprestimo.getLivro().getId());
+			stmt.setLong(2, emprestimo.getAluno().getId());			
+			Calendar dataEmp = Calendar.getInstance();
+			stmt.setDate(3, new java.sql.Date(dataEmp.getTimeInMillis()));
+			stmt.setDate(4, null);
+			
+			stmt.execute();
+			stmt.close();
+			System.out.println("foi emprestado");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return true;
+		}
+		return false;
+	}
+
+	public boolean qtdEmprestimos(Emprestimo emprestimo) throws SQLException {
+
+		try {
+			PreparedStatement stmt = connection
+					.prepareStatement("select * from emprestimo where aluno = ? and dataDevolucao IS NULL;");
+			stmt.setLong(1, emprestimo.getAluno().getId());
+			ResultSet rs = stmt.executeQuery();
+			int cont = 0;
+			while (rs.next()) {
+				cont++;
+			}
+			stmt.close();
+			if (cont > 2) {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public List<Emprestimo> getListaAbertos() {
+		try {
+
+			List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+			PreparedStatement stmt = connection
+					.prepareStatement("select * from emprestimo where dataDevolucao is null;");
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				// criando o objeto Contato
-				String titulo = rs.getString("titulo");
-				// adicionando o objeto na lista
-				result.add(titulo);
+				emprestimos.add(montarEmprestimo(rs));
 			}
-			rs.close();
+
 			stmt.close();
+			return emprestimos;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		return result;
-	}
-	
-	public List<Emprestimo> getByMatAluno(int matricula){
-		List<Emprestimo> result = new ArrayList<>();
-		return result;
 	}
 
-	public int getIdEmprestimo(int idLivro) {
-		int idEmprestimo = 0;
+	public List<Emprestimo> getListaAtraso() {
 		try {
-			String sql = "select emprestimo.id from emprestimos where emprestimo.id_livro = ? and emprestimos.data_devolucao is null;";
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setInt(1, idLivro);
+
+			List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+			PreparedStatement stmt = connection
+					.prepareStatement("select * from emprestimo where dataDevolucao is null and dataEmprestimo < ?;");
+			Calendar date = Calendar.getInstance();
+			stmt.setDate(1, new Date(date.getTimeInMillis() - 14 * 24 * 60 * 60 * 1000));
 			ResultSet rs = stmt.executeQuery();
-			if(rs.next()) {
-				idEmprestimo = rs.getInt("id");
+
+			while (rs.next()) {
+				emprestimos.add(montarEmprestimo(rs));
+			}
+			stmt.close();
+			return emprestimos;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public List<Emprestimo> getLista() {
+		try {
+
+			List<Emprestimo> emprestimo = new ArrayList<Emprestimo>();
+			PreparedStatement stmt = connection.prepareStatement("select * from emprestimo;");
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				emprestimo.add (montarEmprestimo(rs));
+				
 			}
 			rs.close();
 			stmt.close();
+			return emprestimo;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	private Emprestimo montarEmprestimo(ResultSet rs) throws SQLException {
+		Emprestimo emprestimo = new Emprestimo();
+
+		emprestimo.setId(rs.getLong("id"));
+		Aluno aluno = new AlunoDAO().getById(rs.getLong("aluno"));
+		emprestimo.setAluno(aluno);
+		Livro livro = new LivroDAO().getById(rs.getLong("livro"));
+		emprestimo.setLivro(livro);
+
+		Calendar data = Calendar.getInstance();
+		data.setTime(rs.getDate("dataEmprestimo"));
+		emprestimo.setDataEmprestimo(data);
+
+		if (rs.getDate("dataDevolucao") != null) {
+			Calendar data2 = Calendar.getInstance();
+			data2.setTime(rs.getDate("dataDevolucao"));
+			emprestimo.setDataDevolucao(data2);
+		}
+
+		return emprestimo;
+	}
+
+	public boolean devolucao(Emprestimo emprestimo) {
+		String sql = "update emprestimo set dataDevolucao=? where id=?;";
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setDate(1, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+			stmt.setLong(2, emprestimo.getId());
+			stmt.execute();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
-		return idEmprestimo;
+		return true;
+	}
+
+	public Emprestimo getEmprestimoByID(Long id) {
+		try {
+
+			Emprestimo emprestimo = null;
+			PreparedStatement stmt = this.connection.prepareStatement("select * from emprestimos where id=?;");
+			stmt.setLong(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				emprestimo = montarEmprestimo(rs);
+			}
+			rs.close();
+			stmt.close();
+			return emprestimo;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+
+		}
 	}
 	
-	public List<Relatorio> emprestimos(){
-		List<Relatorio> result = new ArrayList<>();
+	public boolean livroEmprestado(int id) {
 		try {
-			String sql = "select emprestimo.mat_aluno, aluno.nome, livro.titulo, livro.autor, livro.edicao, emprestimo.data_emprestimo from emprestimo, aluno, livro where emprestimo.mat_aluno = alunos.matricula && emprestimo.id_livro = livro.id && emprestimo.data_devolucao is null;";
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement("select id from emprestimo where idLivro = ? and dataDevolucao is null;");
+			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
-			while(rs.next()) {
-				Relatorio r = new Relatorio();
-				r.setMatriculaAluno(rs.getInt("mat_aluno"));
-				r.setAluno(rs.getString("nome"));
-				r.setTituloLivro(rs.getString("titulo"));
-				r.setAutor(rs.getString("autor"));
-				r.setEdicao(rs.getInt("edicao"));
-				Calendar dataEmprestimo = Calendar.getInstance();
-				dataEmprestimo.setTime(rs.getDate("data_emprestimo"));
-				r.setDataEmprestimo(dataEmprestimo.getTime().toString());
-				
-				Calendar dataCalendar = Calendar.getInstance();
-				int tempoInicial = (int) dataEmprestimo.getTimeInMillis();
-				int tempoAtual = (int) dataCalendar.getTimeInMillis();
-				int inspiracao = tempoInicial + (24 * 60 * 60 * 1000 * 14);
-				
-				if(tempoAtual <= inspiracao) {
-					r.setAtraso(true);
-				}else {
-					r.setAtraso(false);
-				}
-				result.add(r);
+			if (rs.next()) {
+				return true;
 			}
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
-		
-		return result;
+		return false;
 	}
+	
+
+	public boolean qtdLivros(Emprestimo emprestimo) {
+		String sql = "select * from emprestimos where livro = ? and dataDevolucao IS NULL;";
+		int LivEmpre = 0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+
+			stmt.setLong(1, emprestimo.getLivro().getId());
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				LivEmpre++;
+			}
+
+			if (LivEmpre >= 1) {
+				return false;
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+
+	}
+
 }

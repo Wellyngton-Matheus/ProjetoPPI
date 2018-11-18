@@ -13,8 +13,8 @@ public class Livro {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(long l) {
+		this.id = (int) l;
 	}
 
 	public String getTitulo() {

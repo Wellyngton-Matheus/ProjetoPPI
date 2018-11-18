@@ -9,6 +9,7 @@
 		<li><a href="/bibliotecaspring/Livro/pag">Adicionar Livro</a></li>
 		<li><a href="/bibliotecaspring/Aluno/ListarAluno">Listar Alunos</a></li>
 		<li><a href="/bibliotecaspring/Livro/ListarLivro">Listar Livro</a></li>
-		<li><a href="/bibliotecaspring/Emprestimo/form">Fazer Emprestimo</a></li>
+		<li><a href="/bibliotecaspring/Emprestimo/formEmp">Fazer Emprestimo</a></li>
+		<li><a href="/bibliotecaspring/Emprestimo/ListarEmp">Listar Emprestimo</a></li>
 	</ul>
 </nav>

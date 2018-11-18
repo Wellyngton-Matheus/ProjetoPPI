@@ -17,19 +17,7 @@ public class LivroDAO {
 		connection = ConnectionFactory.getConnection();
 	}
 	
-	public boolean livroEstaEmprestado(int id) {
-		try {
-		PreparedStatement stmt = this.connection.prepareStatement("select * from livro where id = ?;");
-		stmt.setInt(1, id);
-		ResultSet rs = stmt.executeQuery();
-		if(rs.next() && rs.getBoolean("emprestado")) {
-			return true;
-		}
-		}catch(SQLException e) {
-			System.out.println("nao deu certo");
-		}
-		return false;
-	}
+	
 	public boolean inserir(Livro livro) {
 		String sql = "insert into livro (titulo, autor, editora, anoPublicado, edicao) values (?, ?, ?, ?, ?);";
 
@@ -138,12 +126,12 @@ public class LivroDAO {
 		return result;
 	}
 	
-	public Livro getById(int id) {
+	public Livro getById(long l) {
 		Livro result = null;
 
 		try {
 			PreparedStatement stmt = this.connection.prepareStatement("select * from livro where id = ?;");
-			stmt.setInt(1, id);
+			stmt.setInt(1, (int) l);
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {

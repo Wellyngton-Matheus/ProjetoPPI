@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Cadastro de Aluno</title>
+<title>Insert title here</title>
 </head>
 <body>
-	<h1>O aluno foi cadastrado</h1>
+<h1>O emprestimo foi efetuado</h1>
 </body>
 </html>

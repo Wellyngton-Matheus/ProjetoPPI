@@ -24,7 +24,7 @@ public class AlunoController {
 	public String adicionar(Aluno aluno) {
 		System.out.println(aluno);
 		AlunoDAO alunoDAO = new AlunoDAO();
-		AlunoDAO.inserir(aluno);
+		alunoDAO.inserir(aluno);
 		return "Aluno/AlunoCadastrado";
 	}
 
