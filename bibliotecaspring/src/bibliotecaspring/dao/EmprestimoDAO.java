@@ -68,47 +68,6 @@ public class EmprestimoDAO {
 
 	}
 
-	public List<Emprestimo> getListaAbertos() {
-		try {
-
-			List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
-			PreparedStatement stmt = connection
-					.prepareStatement("select * from emprestimo where dataDevolucao is null;");
-			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				emprestimos.add(montarEmprestimo(rs));
-			}
-
-			stmt.close();
-			return emprestimos;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
-	public List<Emprestimo> getListaAtraso() {
-		try {
-
-			List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
-			PreparedStatement stmt = connection
-					.prepareStatement("select * from emprestimo where dataDevolucao is null and dataEmprestimo < ?;");
-			Calendar date = Calendar.getInstance();
-			stmt.setDate(1, new Date(date.getTimeInMillis() - 14 * 24 * 60 * 60 * 1000));
-			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				emprestimos.add(montarEmprestimo(rs));
-			}
-			stmt.close();
-			return emprestimos;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
 	public List<Emprestimo> getLista() {
 		try {
 
@@ -117,7 +76,7 @@ public class EmprestimoDAO {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				emprestimo.add (montarEmprestimo(rs));
+				emprestimo.add (criandoEmprestimo(rs));
 				
 			}
 			rs.close();
@@ -128,8 +87,21 @@ public class EmprestimoDAO {
 		}
 
 	}
+	
+	public boolean remover(Emprestimo emprestimo) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("delete from emprestimo where id=?;");
+			stmt.setLong(1, emprestimo.getId());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
-	private Emprestimo montarEmprestimo(ResultSet rs) throws SQLException {
+	private Emprestimo criandoEmprestimo(ResultSet rs) throws SQLException {
 		Emprestimo emprestimo = new Emprestimo();
 
 		emprestimo.setId(rs.getLong("id"));
@@ -174,7 +146,7 @@ public class EmprestimoDAO {
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				emprestimo = montarEmprestimo(rs);
+				emprestimo = criandoEmprestimo(rs);
 			}
 			rs.close();
 			stmt.close();
@@ -203,29 +175,6 @@ public class EmprestimoDAO {
 	}
 	
 
-	public boolean qtdLivros(Emprestimo emprestimo) {
-		String sql = "select * from emprestimos where livro = ? and dataDevolucao IS NULL;";
-		int LivEmpre = 0;
-		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
-
-			stmt.setLong(1, emprestimo.getLivro().getId());
-			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				LivEmpre++;
-			}
-
-			if (LivEmpre >= 1) {
-				return false;
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
-
-	}
+	
 
 }

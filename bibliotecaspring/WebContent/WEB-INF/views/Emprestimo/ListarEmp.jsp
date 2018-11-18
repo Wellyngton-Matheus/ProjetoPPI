@@ -15,18 +15,19 @@
 
 		<table border ="1">
 			<tr>
-				<th>Nome do aluno</th>
+				<th>Nome do Aluno</th>
 				<th>Nome do Livro</th>
 				<th>Data de emprestimo</th>
 				<th>Data de Devolução</th>
 			</tr>
 				<c:forEach var="emprestimo" items="${Emprestimo }">
 			<tr>
-					<td>${emprestimo.aluno }</td>
+					<td>${emprestimo.aluno.nome }</td>
 					<td>${emprestimo.livro.titulo }</td>
 					<td><fmt:formatDate value="${emprestimo.dataEmprestimo.time}" pattern="dd/MM/yyyy" /></td>
 					<td><fmt:formatDate value="${emprestimo.dataDevolucao.time}" pattern="dd/MM/yyyy" /></td>
 					<td><a href="/bibliotecaspring/Emprestimo/devolucao?id=${emprestimo.id}">devolucao</a></td>
+					<td><a href="/bibliotecaspring/Emprestimo/remover?id=${emprestimo.id}">remover</a></td>
 				</tr>
 			</c:forEach>
 		</table>

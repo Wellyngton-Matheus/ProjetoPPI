@@ -59,6 +59,14 @@ public class EmprestimoController {
 		emprestimoDAO.devolucao(emprestimo);
 		
 		return "redirect:../Emprestimo/ListarEmp";
+	
 
+	}
+	@RequestMapping("/Emprestimo/remover")
+	public ModelAndView remover(Emprestimo emprestimo) {
+		System.out.println("Chamou o metodo remover emprestimo");
+		EmprestimoDAO emprestimoDAO = new EmprestimoDAO();
+		emprestimoDAO.remover(emprestimo);
+		return listar();
 	}
 }

@@ -108,13 +108,15 @@ public class AlunoDAO {
 		Aluno result = null;
 
 		try {
-			PreparedStatement stmt = this.connection.prepareStatement("select * from aluno where matricula = ?;");
+			PreparedStatement stmt = this.connection.prepareStatement("select * from aluno where id = ?;");
 			stmt.setInt(1, (int) l);
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 				// criando o objeto Contato
+				
 				result = new Aluno();
+				result.setId(rs.getLong("id"));
 				result.setMatricula(rs.getString("matricula"));
 				result.setNome(rs.getString("nome"));
 				result.setCpf(rs.getString("cpf"));
