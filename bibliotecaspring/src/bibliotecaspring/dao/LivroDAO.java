@@ -53,8 +53,6 @@ public class LivroDAO {
 				livro.setEditora(rs.getString("editora"));
 				livro.setanoPublicado(rs.getInt("anoPublicado"));
 
-				
-
 				result.add(livro);
 			}
 			rs.close();
